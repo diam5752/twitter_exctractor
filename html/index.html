@@ -1,0 +1,86 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,800" rel="stylesheet"/>
+    <link href="css/main.css" rel="stylesheet"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<div class="s006">
+    <form id="myForm">
+        <fieldset>
+            <legend>What are you looking for?</legend>
+            <div class="inner-form">
+                <div class="input-field">
+                    <button class="btn-search" type="button" id="myBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                        </svg>
+                    </button>
+                    <input id="keyword" type="text" placeholder="e.g. Donald Trump"/>
+                    <div id="demo" style='margin-top: 30px;height:600px;overflow: auto'></div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    <button id="btn" style="display: none;">Get External Content</button>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var query = document.getElementById("keyword");
+        // Execute a function when the user releases a key on the keyboard
+        query.addEventListener("keypress", function (event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                // Trigger the button element with a click
+                $("#btn").click();
+            }
+        });
+
+        $("#btn").click(function () {
+
+            $("form").animate({
+                height: "1000px"
+            }, 1400);
+            $("demo").empty();
+            $.ajax({
+                    url: "../app/extractor.php",
+                    type: 'POST',
+                    data: {number_of_results: '10', query: query.value},
+                    success: function (result) {
+                        var text = "";
+                        var obj = JSON.parse(result);
+                        for (i = 0; i < obj.length; i++) {
+                            text +=
+                                "<br>" +
+                                "<div class=\"panel panel-info\">\n" +
+                                "<div class=\"panel-heading\">" +
+                                "<i class=\"fa fa-twitter-square\" style=\"font-size:20px;color:#38A1F3;margin-right: 20px;\"></i>"
+                                + obj[i].name + "</div>\n" +
+                                "<div class=\"panel-body\">" + obj[i].full_text + "</div>\n" +
+                                "</div>";
+                        }
+                        document.getElementById("demo").innerHTML = text;
+                    }
+                }
+            );
+        });
+    });
+</script>
+
+
+</body>
+</html>

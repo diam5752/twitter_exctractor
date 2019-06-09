@@ -1,0 +1,16 @@
+{
+  "name": "twitter_extractor/package_name",
+  "description": "extracting most popular tweets",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Aggelos's name",
+      "email": "diam5752@gmail.com"
+    }
+  ],
+  "require": {
+    "squizlabs/php_codesniffer": "3.4.2",
+    "abraham/twitteroauth": "1.0.1"
+  }
+}
